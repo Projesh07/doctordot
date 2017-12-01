@@ -5,6 +5,18 @@
 </head>
 <body>
 
+<<<<<<< HEAD
+=======
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> {% if "safe_link" in message.tags %}
+     {{message|safe}} {%else%} {{ message }} {% endif %}</li>
+    {% endfor %}
+</ul>
+{% endif %}	
+
+>>>>>>> 78139ca93dfc0a5431430ad86cefe2509987247c
 <h1>{{title}}</h1>
 <ul>
 <li>{{post.title}}</li>
