@@ -15,10 +15,18 @@ Including another URLconf
 """
 
 from django.conf.urls import url, include
+from django.conf.urls import (
+handler400, handler403, handler404, handler500
+)
 
 from django.contrib import admin
 # from posts import 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^posts/', include("posts.urls")),
+    url(r'^posts/', include("posts.urls",namespace="posts")),
 ]
+
+handler400 = 'posts.views.bad_request'
+# handler403 = 'posts.views.permission_denied'
+# handler404 = 'my_app.views.page_not_found'
+handler500 = 'posts.views.server_error'
