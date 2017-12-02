@@ -40,18 +40,10 @@ def post_index(request):
 
 	return render(request,"index.html",context)
 
-def post_details(request,id=None):
+def post_details(request,slug=None):
 
 
-	instance=get_object_or_404(Post,id=id)
-	context={
-		"title":"Post detail",
-		"post":instance
-	}
-
-
-
-	instance=get_object_or_404(Post,id=id)
+	instance=get_object_or_404(Post,slug=slug)
 	context={
 		"title":"Post detail",
 		"post":instance
@@ -84,9 +76,9 @@ def post_create(request):
 	
 
 
-def post_update(request,id=None):
+def post_update(request,slug=None):
 
-	instance=get_object_or_404(Post,id=id)
+	instance=get_object_or_404(Post,slug=slug)
 
 	forms=PostForm(request.POST or None,request.FILES or None,instance=instance)
 
@@ -109,8 +101,8 @@ def post_update(request,id=None):
 
 	return render(request,"post_form.html",context)
 
-def post_delete(request,id=None):
-	instance=get_object_or_404(Post,id=id)
+def post_delete(request,slug=None):
+	instance=get_object_or_404(Post,slug=slug)
 	instance.delete()
 
 	messages.success(request,"Post deleted successfully")
