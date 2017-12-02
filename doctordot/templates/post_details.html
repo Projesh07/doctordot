@@ -18,6 +18,9 @@
 <h1>{{title}}</h1>
 <ul>
 <li>{{post.title}}</li>
+{% if post.image %}
+<li><img src="{{post.image.url}}" class="img-responsive"></li>
+{%endif%}
 <li>{{post.content}}</li>
 <li>{{post.updated}}</li>
 <li>{{post.created}}</li>

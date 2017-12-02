@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
+{% extends "layout/base.html" %}
 
-<form method="POST" action="">{% csrf_token %}
+{% load staticfiles %}
+
+{% block head_title %} {{ instance.title}} | {{block.super}} {%endblock head_title %}
+
+{% block content %}
+
+<form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
 {{form.as_p}}
 <input type="submit" name="" value="create post">
 </form>
-</body>
-</html>
+{%endblock%}

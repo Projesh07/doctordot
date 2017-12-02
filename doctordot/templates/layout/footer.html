@@ -75,9 +75,24 @@
     ================================================= -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTMXfmDn0VlqWIyoOxK8997L-amWbUPiQ&callback=initMap"></script>
     <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    
+    <script src="{% static 'js/waypoint.js' %}"></script>
+    <script src="{% static 'js/scrollar.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/jquery.sticky-kit.min.js' %}"></script>
     <script src="{% static 'js/jquery.scrollbar.min.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
+
+      <script>
+    var infinite = new Waypoint.Infinite({
+      element: $('div.infinite-container')[0],
+      onBeforePageLoad: function () {
+        $('.loading').show();
+      },
+      onAfterPageLoad: function ($items) {
+        $('.loading').hide();
+      }
+    });
+  </script>
   </body>
 </html>

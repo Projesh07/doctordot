@@ -15,9 +15,23 @@ from .models import Post
 from .forms import PostForm 
 
 # Create your views here.
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
 def post_index(request):
 
-	queryset=Post.objects.all()
+	queryset_list=Post.objects.all() #.order_by("-created")
+	paginator = Paginator(queryset_list, 2) # Show 25 contacts per page
+
+	page = request.GET.get('page')
+	try:
+	    queryset = paginator.page(page)
+	except PageNotAnInteger:
+	    # If page is not an integer, deliver first page.
+	    queryset = paginator.page(1)
+	except EmptyPage:
+	    # If page is out of range (e.g. 9999), deliver last page of results.
+	    queryset = paginator.page(paginator.num_pages)
 
 	context={
 		"posts":queryset,
@@ -48,20 +62,8 @@ def post_details(request,id=None):
 
 def post_create(request):
 
-	forms=PostForm(request.Post or None)
 
-	if forms.is_valid():
-		instance=forms.save(commit=False)
-		instance.save()
-		
-	context={
-	"form":forms,
-	"title":"Create"
-	}
-
-	return render(request,"post_create.html",context)	
-
-	forms=PostForm(request.POST or None)
+	forms=PostForm(request.POST or None, request.FILES or None)
 
 	if forms.is_valid():
 		instance=forms.save(commit=False)
@@ -69,8 +71,8 @@ def post_create(request):
 		#Success Redirect
 		messages.success(request,"Post created successfully")
 		return HttpResponseRedirect(instance.get_absolute_url())
-	else:
-		messages.success(request,"Post not created look something went wrong")	
+	# else:
+	# 	messages.error(request,"Post not created look something went wrong")	
 		
 	context={
 	"form":forms,
@@ -86,7 +88,7 @@ def post_update(request,id=None):
 
 	instance=get_object_or_404(Post,id=id)
 
-	forms=PostForm(request.POST or None,instance=instance)
+	forms=PostForm(request.POST or None,request.FILES or None,instance=instance)
 
 	if forms.is_valid():
 		instance=forms.save(commit=False)
@@ -95,8 +97,8 @@ def post_update(request,id=None):
 		#Success Redirect
 		messages.success(request,"<a href='#'> Post</a> updated successfully",extra_tags="safe_link")
 		return HttpResponseRedirect(instance.get_absolute_url())
-	else:
-		messages.success(request,"Post not updated successfully looks something went wrong")	
+	# else:
+	# 	messages.error(request,"Post not updated successfully looks something went wrong")	
 
 	context={
 		"title":"Post detail",
@@ -115,11 +117,7 @@ def post_delete(request,id=None):
 	return redirect("posts:list")
 	# return HttpResponseRedirect(instance.get_absolute_url())
 
-def handler404(request):
-    response = render_to_response('404.html', {},
-                                  context_instance=RequestContext(request))
-    response.status_code = 404
-    return response
+
 
 def handler404(request):
     response = render_to_response('404.html', {},

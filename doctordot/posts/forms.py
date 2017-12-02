@@ -7,4 +7,4 @@ class PostForm(forms.ModelForm):
 		model=Post
 		# exclude=[]
 
-		fields=["title","content",]
+		fields=["title","content","image"]
