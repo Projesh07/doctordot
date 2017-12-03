@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.http import HttpResponse
+from django.http import HttpResponse,Http404
 from django.shortcuts import render,get_object_or_404,render_to_response
 from django.template import RequestContext
 
@@ -17,6 +17,7 @@ from .forms import PostForm
 # Create your views here.
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+# https://www.codingforentrepreneurs.com/projects/try-django-111/watch-go-live-heroku/?play=true
 
 def post_index(request):
 
@@ -53,12 +54,15 @@ def post_details(request,slug=None):
 
 
 def post_create(request):
-
-
+	if not request.user.is_staff or not request.user.is_superuser:
+		raise Http404
+	if not request.user.is_authenticated:
+		raise Http404
 	forms=PostForm(request.POST or None, request.FILES or None)
 
 	if forms.is_valid():
 		instance=forms.save(commit=False)
+		instance.user=request.user
 		instance.save()
 		#Success Redirect
 		messages.success(request,"Post created successfully")
@@ -78,6 +82,8 @@ def post_create(request):
 
 def post_update(request,slug=None):
 
+	if not request.user.is_staff or not request.user.is_superuser:
+		raise Http404
 	instance=get_object_or_404(Post,slug=slug)
 
 	forms=PostForm(request.POST or None,request.FILES or None,instance=instance)
@@ -102,6 +108,9 @@ def post_update(request,slug=None):
 	return render(request,"post_form.html",context)
 
 def post_delete(request,slug=None):
+
+	if not request.user.is_staff or not request.user.is_superuser:
+		Http404
 	instance=get_object_or_404(Post,slug=slug)
 	instance.delete()
 
